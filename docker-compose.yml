@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  notebooks:
+    build:
+      context: data-science/.
+      dockerfile: Dockerfile
+    container_name: paradise-panama-papers
+    ports:
+      - "7777:7077" #Spark Master
+      - "8780:8080" #Spark Master UI
+      - "8781:8081" #Spark Worker UI
+      - 8888:8888 # Jupyter Notebook UI
+      - 4040:4040
+    networks:
+      - paradise-panama-papers
+    environment:
+      PYSPARK_SUBMIT_ARGS: '--packages graphframes:graphframes:0.8.1-spark3.0-s_2.12 pyspark-shell'
+
+    volumes:
+      - ~/.aws/:/home/jovyan/.aws/
+      - ./data-science/notebooks/:/tmp/notebooks/
+
+networks:
+  paradise-panama-papers:
